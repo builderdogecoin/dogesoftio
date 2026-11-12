@@ -1,15 +1,15 @@
-# @dogesoft/sdk
+# @dogesoftio/sdk
 
 **Dogecoin, Doginals, DRC-20 Coins and .doge names in a few lines of JavaScript or TypeScript.**
 
 A small, typed client for the public Doge Soft Explorer API. No node, no key, no indexer of your own, and zero dependencies. Much simple. Very typed.
 
 ```bash
-npm i @dogesoft/sdk
+npm i @dogesoftio/sdk
 ```
 
 ```js
-import { DogeSoft, dogeFromKoinu } from "@dogesoft/sdk";
+import { DogeSoft, dogeFromKoinu } from "@dogesoftio/sdk";
 
 const ds = new DogeSoft(); // https://explorer.dogesoft.io
 

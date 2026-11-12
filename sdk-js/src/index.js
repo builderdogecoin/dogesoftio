@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright 2026 Doge Soft
-// @dogesoft/sdk: a small client for the public Doge Soft Explorer API.
+// @dogesoftio/sdk: a small client for the public Doge Soft Explorer API.
 
 export const DEFAULT_BASE_URL = "https://explorer.dogesoft.io";
 export const KOINU_PER_DOGE = 100_000_000n;
