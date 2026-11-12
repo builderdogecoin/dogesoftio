@@ -516,10 +516,10 @@ fn op_rules() {
         r#"{"p":"drc-20","op":"deploy","tick":"dogi","max":"1","dec":8}"#,
         r#"{"p":"drc-20","op":"deploy","tick":"dogi","max":"1","dec":"19"}"#,
         r#"{"p":"drc-20","op":"deploy","tick":"dogi","max":"1.5","dec":"0"}"#,
-        r#"{"p":"drc-20","op":"mint","tick":" dog","amt":"5"}"#,
     ] {
         assert_eq!(p(bad), None, "{bad}");
     }
+    assert_eq!(p(r#"{"p":"drc-20","op":"mint","tick":" dog","amt":"5"}"#), Some(Op::Mint { tick: " dog".into(), amt: "5".into() }));
     // `decimals` is ignored, `dec` absent = 18, lim absent = max
     assert_eq!(
         p(r#"{"p":"drc-20","op":"deploy","tick":"dogi","max":"21","decimals":"2"}"#),
