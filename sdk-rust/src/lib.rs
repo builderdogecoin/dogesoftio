@@ -284,24 +284,29 @@ pub fn koinu_to_doge(koinu: u64) -> String {
     format!("{}.{:08}", koinu / KOINU_PER_DOGE, koinu % KOINU_PER_DOGE)
 }
 
-/// `"9.37600979"` -> `937600979`. At most 8 decimals.
-pub fn doge_to_koinu(doge: &str) -> Option<u64> {
-    let (i, f) = doge.trim().split_once('.').unwrap_or((doge.trim(), ""));
-    if i.is_empty() || f.len() > 8 || !i.bytes().all(|b| b.is_ascii_digit()) || !f.bytes().all(|b| b.is_ascii_digit()) {
-        return None;
-    }
-    let fv: u64 = if f.is_empty() { 0 } else { format!("{f:0<8}").parse().ok()? };
-    i.parse::<u64>().ok()?.checked_mul(KOINU_PER_DOGE)?.checked_add(fv)
-}
-
-/// A DRC-20 decimal string as an exact integer of `10^-decimals` units: `("492.5", 18)` -> `492.5 * 10^18`.
-pub fn drc20_units(amount: &str, decimals: u32) -> Option<u128> {
-    let (i, f) = amount.trim().split_once('.').unwrap_or((amount.trim(), ""));
-    let f = f.trim_end_matches('0');
-    if i.is_empty() || f.len() > decimals as usize || !i.bytes().all(|b| b.is_ascii_digit()) || !f.bytes().all(|b| b.is_ascii_digit()) {
+/// Read an amount the same way ds-rules does: ASCII digits, optional one dot with digits on both
+/// sides, no whitespace, plus, exponent or comma, and no more fraction digits than `decimals`.
+/// Invalid input is rejected, not coerced.
+fn units_from_amount(amount: &str, decimals: u32) -> Option<u128> {
+    let (i, f) = match amount.split_once('.') {
+        Some((i, f)) => (i, f),
+        None => (amount, ""),
+    };
+    let digits = |p: &str| !p.is_empty() && p.bytes().all(|b| b.is_ascii_digit());
+    if !digits(i) || (amount.contains('.') && !digits(f)) || f.len() > decimals as usize {
         return None;
     }
     let scale = 10u128.checked_pow(decimals)?;
     let fv: u128 = if f.is_empty() { 0 } else { format!("{f:0<width$}", width = decimals as usize).parse().ok()? };
     i.parse::<u128>().ok()?.checked_mul(scale)?.checked_add(fv)
+}
+
+/// `"9.37600979"` -> `937600979`. At most 8 decimals.
+pub fn doge_to_koinu(doge: &str) -> Option<u64> {
+    units_from_amount(doge, 8)?.try_into().ok()
+}
+
+/// A DRC-20 decimal string as an exact integer of `10^-decimals` units: `("492.5", 18)` -> `492.5 * 10^18`.
+pub fn drc20_units(amount: &str, decimals: u32) -> Option<u128> {
+    units_from_amount(amount, decimals)
 }

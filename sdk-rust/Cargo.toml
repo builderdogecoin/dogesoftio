@@ -1,6 +1,6 @@
 [package]
 name = "dogesoft"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 rust-version = "1.75"
 description = "Async client for the Doge Soft Explorer API: Dogecoin, Doginals, DRC-20 Coins and .doge names."

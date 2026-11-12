@@ -94,10 +94,21 @@ fn amounts() {
     assert_eq!(koinu_to_doge(5), "0.00000005");
     assert_eq!(doge_to_koinu("9.37600979"), Some(937_600_979));
     assert_eq!(doge_to_koinu("1"), Some(100_000_000));
+    assert_eq!(doge_to_koinu("0"), Some(0));
+    assert_eq!(doge_to_koinu("0.00000001"), Some(1));
     assert_eq!(doge_to_koinu("1.000000001"), None);
+    for bad in [" 1", "1 ", "1\n", "9.", ".5", "+1", "1e2", "1E2", "1.2e1", "1,000", "1,2", "", "1.2.3"] {
+        assert_eq!(doge_to_koinu(bad), None, "{bad}");
+    }
     assert_eq!(drc20_units("0.5", 1), Some(5));
+    assert_eq!(drc20_units("1.20", 2), Some(120));
     assert_eq!(drc20_units("0.55", 1), None);
     assert_eq!(drc20_units("-1", 18), None);
+    // Trailing zeros still count as fraction digits, same as ds-rules.
+    assert_eq!(drc20_units("1.200", 2), None);
+    for bad in [" 0.5", "0.5 ", "0.5\n", "1.", ".5", "+1", "1e2", "1,2", ""] {
+        assert_eq!(drc20_units(bad, 1), None, "{bad}");
+    }
 }
 
 #[tokio::test]

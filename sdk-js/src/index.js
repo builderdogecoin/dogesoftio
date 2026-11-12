@@ -34,11 +34,25 @@ export function dogeFromKoinu(koinu) {
   return `${neg ? "-" : ""}${a / KOINU_PER_DOGE}.${frac}`;
 }
 
+/**
+ * Read an amount the same way ds-rules does: a string of ASCII digits, optional one dot with
+ * digits on both sides, no whitespace, plus, exponent or comma, and no more fraction digits than
+ * `decimals`. Invalid input is rejected, not coerced.
+ */
+function unitsFromAmount(amount, decimals) {
+  if (typeof amount !== "string" || !Number.isInteger(decimals) || decimals < 0) {
+    throw new RangeError(`not a valid amount: ${amount}`);
+  }
+  const m = /^(\d+)(?:\.(\d+))?$/.exec(amount);
+  if (!m) throw new RangeError(`not a valid amount: ${amount}`);
+  const frac = m[2] || "";
+  if (frac.length > decimals) throw new RangeError(`${amount} has more than ${decimals} decimals`);
+  return BigInt(m[1]) * 10n ** BigInt(decimals) + BigInt(frac.padEnd(decimals, "0") || "0");
+}
+
 /** Parse a DOGE amount string to koinu (bigint): "9.37600979" -> 937600979n. */
 export function dogeToKoinu(doge) {
-  const m = /^(\d+)(?:\.(\d{0,8}))?$/.exec(String(doge).trim());
-  if (!m) throw new RangeError(`not a DOGE amount: ${doge}`);
-  return BigInt(m[1]) * KOINU_PER_DOGE + BigInt((m[2] || "").padEnd(8, "0"));
+  return unitsFromAmount(doge, 8);
 }
 
 /**
@@ -46,11 +60,7 @@ export function dogeToKoinu(doge) {
  * drc20Units("492.5", 18) -> 492500000000000000000n.
  */
 export function drc20Units(amount, decimals = 18) {
-  const m = /^(\d+)(?:\.(\d+))?$/.exec(String(amount).trim());
-  if (!m) throw new RangeError(`not a DRC-20 amount: ${amount}`);
-  const frac = (m[2] || "").replace(/0+$/, "");
-  if (frac.length > decimals) throw new RangeError(`${amount} has more than ${decimals} decimals`);
-  return BigInt(m[1]) * 10n ** BigInt(decimals) + BigInt(frac.padEnd(decimals, "0") || "0");
+  return unitsFromAmount(amount, decimals);
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -75,7 +85,7 @@ export class DogeSoft {
 
   /** GET a path under the base URL. Backs off politely on 429 (honours Retry-After). */
   async get(path) {
-    const headers = { accept: "application/json", "user-agent": "dogesoft-sdk-js/1.0.0" };
+    const headers = { accept: "application/json", "user-agent": "dogesoft-sdk-js/1.0.1" };
     if (this.apiKey) headers["x-api-key"] = this.apiKey;
     let wait = 1000;
     for (let attempt = 0; ; attempt++) {

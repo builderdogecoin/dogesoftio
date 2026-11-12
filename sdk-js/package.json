@@ -1,6 +1,6 @@
 {
   "name": "@dogesoft/sdk",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Typed client for the Doge Soft Explorer API: Dogecoin, Doginals, DRC-20 Coins and .doge names.",
   "type": "module",
   "main": "./src/index.js",

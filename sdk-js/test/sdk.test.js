@@ -33,14 +33,25 @@ test("koinu fields are exact bigints, even above 2^53", async () => {
   assert.equal(dogeFromKoinu(-5n), "-0.00000005");
   assert.equal(dogeToKoinu("9.37600979"), 937600979n);
   assert.equal(dogeToKoinu("1"), 100000000n);
+  assert.equal(dogeToKoinu("0"), 0n);
+  assert.equal(dogeToKoinu("0.00000001"), 1n);
   assert.throws(() => dogeToKoinu("1.000000001"));
+  for (const bad of [" 1", "1 ", "1\n", "9.", ".5", "+1", "1e2", "1E2", "1.2e1", "1,000", "1,2", "", "1.2.3", 1]) {
+    assert.throws(() => dogeToKoinu(bad));
+  }
 });
 
 test("drc20 amounts stay exact", () => {
   assert.equal(drc20Units("492.000000000000000000"), 492n * 10n ** 18n);
   assert.equal(drc20Units("0.5", 1), 5n);
+  assert.equal(drc20Units("1.20", 2), 120n);
   assert.throws(() => drc20Units("0.55", 1));
   assert.throws(() => drc20Units("-1"));
+  // Trailing zeros still count as fraction digits, same as ds-rules.
+  assert.throws(() => drc20Units("1.200", 2));
+  for (const bad of [" 0.5", "0.5 ", "0.5\n", "1.", ".5", "+1", "1e2", "1,2", "", 0.5]) {
+    assert.throws(() => drc20Units(bad, 1));
+  }
 });
 
 test("paths are encoded ($ in tickers)", async () => {
