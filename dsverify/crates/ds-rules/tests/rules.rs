@@ -479,7 +479,10 @@ fn merge_mined_block_6444515_decodes_and_hashes_to_its_merkle_root() {
 #[test]
 fn tick_rules() {
     assert!(tick_ok("dogi") && tick_ok("DU$T") && tick_ok("\u{1D54F}"));
-    assert!(!tick_ok("dogis") && !tick_ok("dog") && !tick_ok(" abc") && !tick_ok("abc ") && !tick_ok("ab\0c"));
+    assert!(tick_ok(" abc") && tick_ok("abc "));
+    assert_ne!(tick_key(" abc"), tick_key("abc "));
+    assert_ne!(tick_key("DJT "), tick_key(" DJT"));
+    assert!(!tick_ok("dogis") && !tick_ok("dog") && !tick_ok("ab\0c"));
     assert_eq!(tick_key("DoGi"), "dogi");
     assert_eq!(tick_key("DU$T"), "du$t");
     assert_ne!(tick_key("\u{1D54F}"), tick_key("\u{1D47F}"));

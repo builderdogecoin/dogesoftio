@@ -98,9 +98,10 @@ pub fn tick_key(tick: &str) -> String {
     tick.chars().flat_map(|c| c.to_lowercase()).collect()
 }
 
-/// Rules 1 and 4: exactly 4 bytes of UTF-8 as inscribed, no surrounding whitespace, no NUL byte.
+/// Rule 1: exactly 4 bytes of UTF-8 as inscribed, no NUL byte. Leading or trailing
+/// whitespace is a real byte of the tick, not trimmed or rejected.
 pub fn tick_ok(tick: &str) -> bool {
-    tick.len() == 4 && tick.trim() == tick && !tick.contains('\0')
+    tick.len() == 4 && !tick.contains('\0')
 }
 
 fn member_str(p: &json::Parsed, key: &str) -> Result<Option<String>, ()> {
