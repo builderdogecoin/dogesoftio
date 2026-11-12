@@ -1,0 +1,48 @@
+{
+  "name": "@dogesoft/sdk",
+  "version": "1.0.0",
+  "description": "Typed client for the Doge Soft Explorer API: Dogecoin, Doginals, DRC-20 Coins and .doge names.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
+  "files": [
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test test/"
+  },
+  "keywords": [
+    "dogecoin",
+    "doginals",
+    "drc-20",
+    "drc20",
+    "doge",
+    "dogesoft",
+    "inscriptions",
+    "koinu",
+    "names"
+  ],
+  "homepage": "https://github.com/builderdogecoin/dogesoftio/tree/main/sdk-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/builderdogecoin/dogesoftio.git",
+    "directory": "sdk-js"
+  },
+  "bugs": {
+    "url": "https://github.com/builderdogecoin/dogesoftio/issues"
+  },
+  "author": "Doge Soft <koinu@dogesoft.io>",
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

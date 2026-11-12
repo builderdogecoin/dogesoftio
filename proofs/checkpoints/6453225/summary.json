@@ -1,0 +1,39 @@
+{
+  "height": 6453225,
+  "block_hash": "2cc71f47a57624e4d0e47906c6d071628ae7dca6d8ab69035ed261223e80b2df",
+  "block_time": 1794404694,
+  "block_time_utc": "2026-11-11T13:44:54Z",
+  "merkle_root": "bc5783a26cc1098285ff0ce77580e82c9e6166eb0db815205644ef39dbcbb377",
+  "rules": "v1.0 (rules/spec, 15 DRC-20 rules)",
+  "counts": {
+    "drc20_coins": 71689,
+    "balances_available_above_zero": 1702438,
+    "holder_rows": 1750018,
+    "coins_with_holders": 69443,
+    "open_transfer_locks": 528006,
+    "inscriptions_tracked": 180217642
+  },
+  "listings": {
+    "balances": {
+      "file": "balances.tsv",
+      "lines": 1750018,
+      "sha256": "e5677ac91f40127dad06bd21d742146e036b254171eca4d7164c727c992b1c89"
+    },
+    "holders": {
+      "file": "holders.tsv",
+      "lines": 69443,
+      "sha256": "ee4e54599c09665f2a17700ba5b943a2f7baa313377bc636ee7691c738da93cc"
+    },
+    "locks": {
+      "file": "locks.tsv",
+      "lines": 528006,
+      "sha256": "dd43f10798001d63a00ae243f5ea317a6c62e94ed88591e154788f3864ff2412"
+    },
+    "tokens": {
+      "file": "tokens.tsv",
+      "lines": 71689,
+      "sha256": "be6f565262e9ac0d49d8fe40a6f0c18a777872cf847a00251bacdeb874a3826d"
+    }
+  },
+  "format": "UTF-8, one record per line, tab-separated, each line ends in \\n, lines sorted by their bytes; amounts are plain decimals without trailing zeros (0 for zero). balances: tick, owner, available, transferable (rows where either is above zero). holders: tick, holder_count. locks: inscription_txid, tick, owner, amount. tokens: tick, max, lim, dec, minted, deploy_height, deploy_txid, deployer. Reproduce with: dsverify replay --to 6453225 && dsverify proof export --out <dir>"
+}

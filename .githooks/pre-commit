@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: Apache-2.0
+# Pre-commit guard: blocks secrets and machine-specific details before they reach history.
+# Enable once per clone:  git config core.hooksPath .githooks
+set -euo pipefail
+fail=0
+if command -v gitleaks >/dev/null 2>&1; then
+  gitleaks git --staged --redact --no-banner . || fail=1     # gitleaks >= 8.19
+else
+  echo "pre-commit: gitleaks not found (https://github.com/gitleaks/gitleaks), running the basic checks only" >&2
+fi
+# Basic checks on the staged text (added lines only).
+patterns=(
+  '-----BEGIN [A-Z ]*PRIVATE KEY'                 # PEM keys
+  '\b[5KL9c][1-9A-HJ-NP-Za-km-z]{50,51}\b'      # WIF-looking strings
+  '\brpc(user|password)[[:space:]]*='            # dogecoin.conf lines
+  '[A-Za-z]:\\Users\\'                         # Windows home paths
+  '/home/[a-z_][a-z0-9_-]*/'                     # Linux home paths
+  '\b(10|127|172|192|67)\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\b'   # raw IPv4 (127.0.0.1 allowed below)
+)
+added="$(git diff --cached -U0 --no-color --diff-filter=ACM -- . ':(exclude)*.lock' ':(exclude)package-lock.json' ':(exclude)THIRD_PARTY_LICENSES.md' ':(exclude).githooks/*' | grep -E '^\+[^+]' || true)"
+for p in "${patterns[@]}"; do
+  hits="$(printf '%s\n' "$added" | grep -nE -- "$p" | grep -vE '127\.0\.0\.1' || true)"
+  if [ -n "$hits" ]; then echo "pre-commit: blocked, pattern: $p" >&2; printf '%s\n' "$hits" | cut -c1-160 >&2; fail=1; fi
+done
+# Never commit these files at all.
+if git diff --cached --name-only | grep -qiE '(^|/)(\.env(\..*)?|dogecoin\.conf|\.cookie|wallet\.dat|.*\.(pem|key|wif|keystore|db))$'; then
+  echo "pre-commit: blocked, a secret or state file is staged" >&2; fail=1
+fi
+[ "$fail" = 0 ] || { echo "pre-commit: fix the above (or unstage it). Never commit a seed phrase, private key or RPC password." >&2; exit 1; }

@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/builderdogecoin/dogesoftio/rules/vectors/schema.json",
+  "title": "Doge Soft rule test vectors",
+  "description": "Shapes of the JSON vector files. Amounts and koinu offsets that can exceed 2^53 are decimal strings. The envelope corpus is two line files: envelope_cases.in has `id<TAB>script_hex[,script_hex...]`, envelope_cases.expected has `id<TAB>None|Partial|Complete<TAB>content_type_hex<TAB>body_hex`.",
+  "$defs": {
+    "hex": { "type": "string", "pattern": "^([0-9a-f]{2})*$" },
+    "txid": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "uint_string": { "type": "string", "pattern": "^-?[0-9]+$" },
+    "mainnet_reveal": {
+      "type": "object",
+      "required": ["id", "rule", "height", "txid", "raw_hex", "inputs", "held", "parent", "expect"],
+      "properties": {
+        "id": { "type": "string" },
+        "rule": { "type": "string", "description": "spec section the vector tests" },
+        "height": { "type": "integer" },
+        "txid": { "$ref": "#/$defs/txid" },
+        "raw_hex": { "$ref": "#/$defs/hex", "description": "the reveal transaction exactly as Dogecoin Core returns it" },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "prev": { "$ref": "#/$defs/txid" }, "vout": { "type": "integer" }, "value": { "$ref": "#/$defs/uint_string" } }
+          }
+        },
+        "held": {
+          "type": "array",
+          "description": "inscriptions already on the spent koinu: input `vin`, offsets lo..hi (n of them), and where they land (dvout -1 fee, -2 lost; offset + delta)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "vin": { "type": "integer" }, "lo": { "$ref": "#/$defs/uint_string" }, "hi": { "$ref": "#/$defs/uint_string" },
+              "n": { "type": "integer" }, "dvout": { "type": "integer" }, "delta": { "$ref": "#/$defs/uint_string" }
+            }
+          }
+        },
+        "parent": { "type": ["object", "null"], "description": "an unfinished multi-transaction envelope this reveal continues" },
+        "expect": {
+          "type": "object",
+          "required": ["created"],
+          "properties": {
+            "created": { "type": "boolean" },
+            "id": { "type": "string" }, "vout": { "type": "integer" }, "off": { "$ref": "#/$defs/uint_string" },
+            "kind": { "type": "integer", "description": "0 other, 1 text or JSON, 2 DRC-20-like body" },
+            "ctype": { "type": "string" }, "addr": { "type": "string" }, "body_hex": { "$ref": "#/$defs/hex" }
+          }
+        }
+      }
+    },
+    "drc20_body": {
+      "type": "object",
+      "required": ["id", "rule", "body_hex", "drc20_like", "ledger_op"],
+      "properties": {
+        "id": { "type": "string" }, "rule": { "type": "string" }, "body_hex": { "$ref": "#/$defs/hex" },
+        "drc20_like": { "type": "boolean" },
+        "ledger_op": { "type": ["object", "null"], "description": "the DRC-20 operation the body is, or null" },
+        "ledger_throws": { "type": "boolean", "description": "body too deeply nested for a recursive reader; still a valid read" }
+      }
+    },
+    "koinu_case": {
+      "type": "object",
+      "required": ["blk", "expect"],
+      "description": "blk[0] is the coinbase; every tx has ins (value, held[off, iid]), outs, fee and newIid. expect is in processing order (non-coinbase first, coinbase last): gateOpen and placed[iid, new, fromFee, src, dest].",
+      "properties": { "blk": { "type": "array" }, "expect": { "type": "array" } }
+    },
+    "names_file": {
+      "type": "object",
+      "required": ["mainnet_claims", "bodies"],
+      "properties": {
+        "mainnet_claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "height", "txid", "raw_hex", "expect"],
+            "properties": { "expect": { "type": "object", "properties": { "name": { "type": "string" }, "inscription_id": { "type": "string" }, "first_valid_claim": { "type": "boolean" } } } }
+          }
+        },
+        "bodies": {
+          "type": "array",
+          "items": { "type": "object", "required": ["id", "body_hex", "expect"], "properties": { "expect": { "type": "object", "properties": { "name": { "type": ["string", "null"] } } } } }
+        }
+      }
+    }
+  },
+  "oneOf": [
+    { "type": "array", "items": { "$ref": "#/$defs/mainnet_reveal" } },
+    { "type": "array", "items": { "$ref": "#/$defs/drc20_body" } },
+    { "type": "array", "items": { "$ref": "#/$defs/koinu_case" } },
+    { "$ref": "#/$defs/names_file" }
+  ]
+}

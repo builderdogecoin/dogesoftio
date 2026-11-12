@@ -1,0 +1,21 @@
+[package]
+name = "ds-rules"
+description = "The open Doge Soft rules for Doginals, koinu tracking, DRC-20 Coins and .doge names, as pure Rust."
+readme = "../../README.md"
+keywords = ["dogecoin", "doginals", "drc-20", "inscriptions", "dogesoft"]
+categories = ["cryptography::cryptocurrencies"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+hex.workspace = true
+sha2.workspace = true
+ripemd.workspace = true
+bs58.workspace = true
+serde.workspace = true
+serde_json.workspace = true

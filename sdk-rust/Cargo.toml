@@ -1,0 +1,24 @@
+[package]
+name = "dogesoft"
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.75"
+description = "Async client for the Doge Soft Explorer API: Dogecoin, Doginals, DRC-20 Coins and .doge names."
+license = "Apache-2.0"
+authors = ["Doge Soft <koinu@dogesoft.io>"]
+repository = "https://github.com/builderdogecoin/dogesoftio"
+homepage = "https://dogesoft.io"
+documentation = "https://docs.rs/dogesoft"
+readme = "README.md"
+keywords = ["dogecoin", "doginals", "drc-20", "dogesoft", "api"]
+categories = ["api-bindings", "cryptography::cryptocurrencies"]
+include = ["src/**", "tests/**", "README.md", "LICENSE", "Cargo.toml"]
+
+[dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["time"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "io-util", "time", "test-util"] }

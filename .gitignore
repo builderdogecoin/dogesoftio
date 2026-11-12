@@ -1,0 +1,29 @@
+# Build output
+target/
+node_modules/
+dist/
+
+# Secrets: never commit
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+key.properties
+*wallet*.dat
+*.wif
+
+# Local
+.DS_Store
+Thumbs.db
+*.log
+
+# Node / replay state: never commit
+dogecoin.conf
+.cookie
+*.db
+*.db-wal
+*.db-shm

@@ -1,0 +1,15 @@
+name: Question
+description: Ask anything about using Doge Soft, Doginals, DRC-20 Coins or names.
+title: "[Question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        No question is too small. Check docs/faq.md and docs.dogesoft.io first, you might find it there.
+        **Never share a seed phrase or private key with anyone.**
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations: { required: true }

@@ -1,0 +1,38 @@
+name: Bug report or DIFF
+description: Something is wrong, or dsverify / your node disagrees with Doge Soft.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Much thanks for helping the Orbit get even more right!
+        **Never paste a seed phrase, private key, password, RPC password or `.env` contents.**
+        Security problems go to SECURITY.md, not here.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [dsverify, Rules or test vectors, Proofs, Explorer API, sdk-js, sdk-rust, Docs, Other]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you expect, and what did you get?
+    validations: { required: true }
+  - type: textarea
+    id: output
+    attributes:
+      label: Command and output
+      description: The full command and output (for a DIFF, include the block hash dsverify printed).
+      render: text
+  - type: input
+    id: ids
+    attributes:
+      label: Txid, inscription id, address, tick or name involved
+  - type: input
+    id: env
+    attributes:
+      label: Versions
+      description: dsverify or SDK version, Dogecoin Core version, OS

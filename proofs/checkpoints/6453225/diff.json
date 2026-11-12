@@ -1,0 +1,14 @@
+{
+  "height": 6453225,
+  "block_hash": "2cc71f47a57624e4d0e47906c6d071628ae7dca6d8ab69035ed261223e80b2df",
+  "compared": "the live Doge Soft Rust indexer at block 6,453,225 against a strict DRC-20 ledger rebuilt independently from Dogecoin Core blocks",
+  "checked": {
+    "drc20_coins": 71689,
+    "balances_available_above_zero": 1702438,
+    "open_transfer_locks": 528006,
+    "holder_rows": 1750018,
+    "coins_with_holders": 69443
+  },
+  "differences": {},
+  "zero_differences": true
+}

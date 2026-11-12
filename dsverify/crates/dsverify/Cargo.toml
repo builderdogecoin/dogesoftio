@@ -1,0 +1,28 @@
+[package]
+name = "dsverify"
+description = "Check Doge Soft answers for Doginals, DRC-20 Coins and .doge names against your own Dogecoin Core."
+readme = "../../README.md"
+keywords = ["dogecoin", "doginals", "drc-20", "verifier", "dogesoft"]
+categories = ["command-line-utilities", "cryptography::cryptocurrencies"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[[bin]]
+name = "dsverify"
+path = "src/main.rs"
+
+[dependencies]
+ds-rules = { path = "../ds-rules", version = "1.0.0" }
+ds-core-rpc = { path = "../ds-core-rpc", version = "1.0.0" }
+hex.workspace = true
+sha2.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+clap = { version = "4", features = ["derive"] }
+ureq = { version = "2", default-features = false, features = ["json", "tls"] }
+rusqlite = { version = "0.42", features = ["bundled"] }

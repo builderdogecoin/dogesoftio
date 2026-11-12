@@ -1,0 +1,182 @@
+{
+ "mainnet_claims": [
+  {
+   "id": "name-first-valid-claim-3-doge",
+   "rule": "../docs/names.md",
+   "height": 4614699,
+   "txid": "13470906991d77c1ffa31d04a69a39e09d445478ef72e50b8123686d95113856",
+   "raw_hex": "0100000002940b408bfe90cd47735813c2186337aac2a200088a069391b0727c655d2be82a000000009a036f72645119746578742f706c61696e3b20636861727365743d7574662d380006332e646f6765483045022100e0e1ffbc97b38ea03e3e37ce4af0d51720d36a9bd035493eedd2ed18f42beeb00220539b0888686d22e46c0743aa8153f981cebc871a6749769b39aca1ea502c4b760129210321802b1bbff4781a29049a8fa84e71ed1e553ba16c8c196c0b0149c3f283a988ad757575757551ffffffff940b408bfe90cd47735813c2186337aac2a200088a069391b0727c655d2be82a010000006a47304402205e91d4570e1341eea5906c44cd2178dc34c6facba46b5b1f84220ce84cf07d4c02202ee3ef2028c3bb4ff5123649b58350a49c2d5f2a01b550779e4d8830588e437301210321802b1bbff4781a29049a8fa84e71ed1e553ba16c8c196c0b0149c3f283a988ffffffff02a0860100000000001976a9149e57dfec4901a0102ee2861f65115ae31a72cf8988ac02516acc030000001976a9142dd0e2a47d5d39fe839acf69e7bd0eff4b41dcf388ac00000000",
+   "expect": {
+    "name": "3.doge",
+    "inscription_id": "13470906991d77c1ffa31d04a69a39e09d445478ef72e50b8123686d95113856i0",
+    "first_valid_claim": true
+   }
+  },
+  {
+   "id": "name-first-valid-claim-dpalwallet-doge",
+   "rule": "../docs/names.md",
+   "height": 4630142,
+   "txid": "60ef56b3e5f7af4cc25e159f6220396677c20656fcbd27883dc8bf66f705bb99",
+   "raw_hex": "010000000243bacd7576be4bc4909d3bfdc555acca8f7df1c1b61a8a8d560d8fa558aca86d00000000a1036f72645117746578742f706c61696e3b636861727365743d75746638000f6470616c77616c6c65742e646f6765483045022100ad77c65b4d71e7509b6b7be173ad4e31955f0737b9418a9cc205203784d1edbb02207ce463393a09fc2e69c0e08f076719cd79cd0360948dff9d818346f910531dc3012921035b81feb9eec28b57fb8a0b803fce51d69ccb6e4cae951730eecc4fda11421f9aad757575757551ffffffff43bacd7576be4bc4909d3bfdc555acca8f7df1c1b61a8a8d560d8fa558aca86d010000006a4730440220406449c0305393af1341ed7181e7fb516b746b30cd6065dae9ff56bb4743e42c0220198e82c7706f2f88f27c4d5af8e0e34778f59c5c466b0d7e47dba5f01ad78a500121035b81feb9eec28b57fb8a0b803fce51d69ccb6e4cae951730eecc4fda11421f9affffffff02a0860100000000001976a914dcdb44a239321a412c85fb0c55fc15258d5a6b5888ac00d3030b000000001976a914dcdb44a239321a412c85fb0c55fc15258d5a6b5888ac00000000",
+   "expect": {
+    "name": "dpalwallet.doge",
+    "inscription_id": "60ef56b3e5f7af4cc25e159f6220396677c20656fcbd27883dc8bf66f705bb99i0",
+    "first_valid_claim": true
+   }
+  },
+  {
+   "id": "name-first-valid-claim-gm-doge",
+   "rule": "../docs/names.md",
+   "height": 4635100,
+   "txid": "964ac70e140a006020c97da1f287a03e3ca03a5a334e8c28a62e267cf9cbd868",
+   "raw_hex": "01000000023f0711016f57d6d63bc483a292625168d1feb80cf4b072055fadd67bb59fb956000000009a036f72645119746578742f706c61696e3b20636861727365743d7574662d380007676d2e646f67654730440220717d83cade9708508913986aa34b8c2879784d2594b464190122761e34074c6802200e9211a69cd455da83af70a9d0e40a8a34d28664ba2860159af99f65d9891cef01292103b14e053b37675e603187cd1bbc515e5bab76159e3f99f314685de21a5020ee62ad757575757551ffffffff9d4d60aec15a5ca5358d98ec4d706c895442a8c1231e6e892148ae77f1498c92090000006a47304402203b4bd17bfb892333c10ec90c352129ae9035700ab07a078012209fccc0e90c03022007b72daab6f8608eb37690f925adde06a6563cf89d4dedcd7e7683aa9f8537dc012103b14e053b37675e603187cd1bbc515e5bab76159e3f99f314685de21a5020ee62ffffffff0180c3c901000000001976a914fb56533b76e3747b641cb62d0a3298eeb5ef827388ac00000000",
+   "expect": {
+    "name": "gm.doge",
+    "inscription_id": "964ac70e140a006020c97da1f287a03e3ca03a5a334e8c28a62e267cf9cbd868i0",
+    "first_valid_claim": true
+   }
+  },
+  {
+   "id": "name-first-valid-claim-soft-doge",
+   "rule": "../docs/names.md",
+   "height": 4778470,
+   "txid": "ff78a7b32c6761118cd58fd2f6707317a4e4e9c23a8abff89b446ac1067a906f",
+   "raw_hex": "010000000265e1f943d3c04ac1a8d48af9d6e02125bb99095134acef93b1335644e2b24c0b000000009b036f72645118746578742f706c61696e3b636861727365743d7574662d380009736f66742e646f67654730440220491688a2cb221e8ee7e0e087be4f53cc319da2d9f8c91f76e949a3370c85aed402207f73b287fcb50708446cf004d48bd5f1f94b13905205e394f75784bf082fa0c901292102cad7599fb9c38a04730f76e44c3bab93c11d974eb5a86de05dddcb760482055fad757575757551ffffffff65e1f943d3c04ac1a8d48af9d6e02125bb99095134acef93b1335644e2b24c0b010000006b483045022100ceb12624b86dad43ba66a530ca785804be204dc70608b8f7bfee70478eb35abe022070075860f7240e2043aab236091ce0bff7f50253324fe26528fadfb7d78d0008012102cad7599fb9c38a04730f76e44c3bab93c11d974eb5a86de05dddcb760482055fffffffff02a0860100000000001976a914453b61f2823310f27d7aaa71a424b481b2a663e588ac105abff8000000001976a914171de2e7a5ef17edbbb8f936c99ebe2aa69b860d88ac00000000",
+   "expect": {
+    "name": "soft.doge",
+    "inscription_id": "ff78a7b32c6761118cd58fd2f6707317a4e4e9c23a8abff89b446ac1067a906fi0",
+    "first_valid_claim": true
+   }
+  }
+ ],
+ "bodies": [
+  {
+   "id": "name-body-plain-text",
+   "rule": "../docs/names.md",
+   "body_hex": "736f66742e646f6765",
+   "expect": {
+    "name": "soft.doge"
+   }
+  },
+  {
+   "id": "name-body-case-and-space",
+   "rule": "../docs/names.md",
+   "body_hex": "2020536f66742e444f4745200a",
+   "expect": {
+    "name": "soft.doge"
+   }
+  },
+  {
+   "id": "name-body-json-reg",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a22726567222c226e616d65223a22446f6765536f66742e646f6765227d",
+   "expect": {
+    "name": "dogesoft.doge"
+   }
+  },
+  {
+   "id": "name-body-json-register",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a227265676973746572222c226e616d65223a22776f772e736f6674227d",
+   "expect": {
+    "name": "wow.soft"
+   }
+  },
+  {
+   "id": "name-body-xd-ending",
+   "rule": "../docs/names.md",
+   "body_hex": "776f772e7864",
+   "expect": {
+    "name": "wow.𝕏Ð"
+   }
+  },
+  {
+   "id": "name-body-dogemap-is-not-a-name",
+   "rule": "../docs/names.md",
+   "body_hex": "313233342e646f67656d6170",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-two-dots",
+   "rule": "../docs/names.md",
+   "body_hex": "612e622e646f6765",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-no-dot",
+   "rule": "../docs/names.md",
+   "body_hex": "6e6f646f74",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-empty-label",
+   "rule": "../docs/names.md",
+   "body_hex": "2e646f6765",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-leading-hyphen",
+   "rule": "../docs/names.md",
+   "body_hex": "2d782e646f6765",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-trailing-hyphen",
+   "rule": "../docs/names.md",
+   "body_hex": "782d2e646f6765",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-all-digit-ending",
+   "rule": "../docs/names.md",
+   "body_hex": "782e313233",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-space-inside",
+   "rule": "../docs/names.md",
+   "body_hex": "74776f20776f7264732e646f6765",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-json-other-op",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a226275726e222c226e616d65223a22612e646f6765227d",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-drc20-body",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a226472632d3230222c226f70223a226d696e74222c227469636b223a22646f6769222c22616d74223a2231227d",
+   "expect": {
+    "name": null
+   }
+  },
+  {
+   "id": "name-body-json-name-not-string",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a22726567222c226e616d65223a357d",
+   "expect": {
+    "name": null
+   }
+  }
+ ]
+}

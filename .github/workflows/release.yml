@@ -1,0 +1,71 @@
+name: release
+
+# Runs when a maintainer pushes a version tag (v1.0.0, ...). Builds every dsverify binary reproducibly,
+# writes SHA256SUMS and a CycloneDX SBOM, signs SHA256SUMS when the signing key secret is set,
+# and attaches everything to an unpublished GitHub release for a maintainer to review and publish.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: src
+      - name: Build at the fixed path /build/dogesoftio (macOS UUIDs depend on it)
+        run: |
+          sudo mkdir -p /build && sudo chown "$USER" /build
+          mv "$GITHUB_WORKSPACE/src" /build/dogesoftio
+      - name: Tools (pinned)
+        run: |
+          pip install ziglang==0.17.1
+          cargo install cargo-zigbuild --version 0.24.1 --locked
+          cargo install cargo-cyclonedx --version 0.5.10 --locked
+      - name: Build, checksums, SBOM
+        working-directory: /build/dogesoftio/dsverify
+        run: |
+          rustup toolchain install
+          ./release/build.sh
+      - name: Sign SHA256SUMS
+        working-directory: /build/dogesoftio/dsverify
+        env:
+          SIGNING_KEY: ${{ secrets.DSVERIFY_SIGNING_KEY }}
+          SIGNING_FPR: ${{ vars.DSVERIFY_SIGNING_FPR }}
+        run: |
+          if [ -z "$SIGNING_KEY" ] || [ -z "$SIGNING_FPR" ]; then
+            echo "::warning::no signing key configured; SHA256SUMS is not signed"
+            exit 0
+          fi
+          printf '%s' "$SIGNING_KEY" | gpg --batch --import
+          ./release/sign.sh "$SIGNING_FPR"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dsverify-dist
+          path: /build/dogesoftio/dsverify/dist/*
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dsverify-dist
+          path: dist
+      - name: Unpublished release (a maintainer reviews and publishes)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --draft --title "dsverify $TAG" \
+            --notes "Check every file against SHA256SUMS (and SHA256SUMS.asc). How to rebuild these byte for byte - dsverify/REPRODUCIBLE.md"

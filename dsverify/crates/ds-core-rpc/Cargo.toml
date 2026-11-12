@@ -1,0 +1,18 @@
+[package]
+name = "ds-core-rpc"
+description = "A minimal, read-only JSON-RPC client for a stock Dogecoin Core node."
+readme = "../../README.md"
+keywords = ["dogecoin", "rpc", "dogecoin-core", "dogesoft"]
+categories = ["cryptography::cryptocurrencies"]
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+ureq = { version = "2", default-features = false, features = ["json"] }

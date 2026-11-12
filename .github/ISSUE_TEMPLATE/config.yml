@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Doge Soft Docs
+    url: https://docs.dogesoft.io
+    about: Full docs for the whole Orbit.
+  - name: Report a security vulnerability
+    url: https://github.com/builderdogecoin/dogesoftio/security/advisories/new
+    about: Please report security issues confidentially, not in a public issue.
