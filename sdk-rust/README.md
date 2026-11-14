@@ -28,7 +28,7 @@ async fn main() -> Result<(), dogesoft::Error> {
 
 - `Client::default()`, `health`, `balance`, `drc20_holdings`, `drc20`, `resolve_name`, `inscription`, `content_url`
 - DOGE amounts in koinu (`u64`), helpers `koinu_to_doge` and `doge_to_koinu`
-- DRC-20 amounts as exact decimal strings, `drc20_units` for an exact `u128`
+- DRC-20 amounts as exact decimal strings, `drc20_units` for an exact `u128`, `is_valid_drc20_amount` for a mint or transfer amount
 - Polite automatic backoff on HTTP `429` (honours `Retry-After`, `max_retries` default 3)
 - rustls TLS, no OpenSSL
 

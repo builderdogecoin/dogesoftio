@@ -34,10 +34,12 @@ export function dogeFromKoinu(koinu) {
   return `${neg ? "-" : ""}${a / KOINU_PER_DOGE}.${frac}`;
 }
 
+const U64_MAX = (1n << 64n) - 1n;
+
 /**
- * Read an amount the same way ds-rules does: a string of ASCII digits, optional one dot with
- * digits on both sides, no whitespace, plus, exponent or comma, and no more fraction digits than
- * `decimals`. Invalid input is rejected, not coerced.
+ * Read an amount with the same format rules as ds-rules: a string of ASCII digits, optional one
+ * dot with digits on both sides, no whitespace, plus, exponent or comma, and no more fraction
+ * digits than `decimals`. Invalid input is rejected, not coerced. Zero is accepted (balances can be 0).
  */
 function unitsFromAmount(amount, decimals) {
   if (typeof amount !== "string" || !Number.isInteger(decimals) || decimals < 0) {
@@ -50,17 +52,35 @@ function unitsFromAmount(amount, decimals) {
   return BigInt(m[1]) * 10n ** BigInt(decimals) + BigInt(frac.padEnd(decimals, "0") || "0");
 }
 
-/** Parse a DOGE amount string to koinu (bigint): "9.37600979" -> 937600979n. */
+/** Parse a DOGE amount string to koinu (bigint): "9.37600979" -> 937600979n. At most uint64 max koinu. */
 export function dogeToKoinu(doge) {
-  return unitsFromAmount(doge, 8);
+  const koinu = unitsFromAmount(doge, 8);
+  if (koinu > U64_MAX) throw new RangeError(`${doge} is more than uint64 max koinu`);
+  return koinu;
 }
 
 /**
  * Parse a DRC-20 decimal string to an exact bigint in units of 10^-decimals:
- * drc20Units("492.5", 18) -> 492500000000000000000n.
+ * drc20Units("492.5", 18) -> 492500000000000000000n. At most uint64 max whole tokens, like ds-rules.
+ * Zero is accepted (balances can be 0); check a mint or transfer amount with isValidDrc20Amount.
  */
 export function drc20Units(amount, decimals = 18) {
-  return unitsFromAmount(amount, decimals);
+  const units = unitsFromAmount(amount, decimals);
+  if (units > U64_MAX * 10n ** BigInt(decimals)) throw new RangeError(`${amount} is more than uint64 max`);
+  return units;
+}
+
+/**
+ * The full ds-rules amount rule for a DRC-20 mint or transfer: the format above, at most `decimals`
+ * fraction digits (decimals 0 to 18), above zero and at most uint64 max. Never throws.
+ */
+export function isValidDrc20Amount(amount, decimals = 18) {
+  if (!Number.isInteger(decimals) || decimals > 18) return false;
+  try {
+    return drc20Units(amount, decimals) > 0n;
+  } catch {
+    return false;
+  }
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

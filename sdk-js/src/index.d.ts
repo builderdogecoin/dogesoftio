@@ -105,6 +105,7 @@ export declare function parseBody(text: string): unknown;
 export declare function dogeFromKoinu(koinu: bigint | number | string): string;
 export declare function dogeToKoinu(doge: string): bigint;
 export declare function drc20Units(amount: string, decimals?: number): bigint;
+export declare function isValidDrc20Amount(amount: string, decimals?: number): boolean;
 
 export declare class DogeSoft {
   constructor(opts?: Options);

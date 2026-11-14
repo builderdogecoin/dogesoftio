@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 import test from "node:test";
 import assert from "node:assert/strict";
-import { DogeSoft, DogeSoftError, parseBody, dogeFromKoinu, dogeToKoinu, drc20Units } from "../src/index.js";
+import { DogeSoft, DogeSoftError, parseBody, dogeFromKoinu, dogeToKoinu, drc20Units, isValidDrc20Amount } from "../src/index.js";
 
 function mock(routes) {
   const calls = [];
@@ -39,6 +39,8 @@ test("koinu fields are exact bigints, even above 2^53", async () => {
   for (const bad of [" 1", "1 ", "1\n", "9.", ".5", "+1", "1e2", "1E2", "1.2e1", "1,000", "1,2", "", "1.2.3", 1]) {
     assert.throws(() => dogeToKoinu(bad));
   }
+  assert.equal(dogeToKoinu("184467440737.09551615"), 18446744073709551615n);
+  assert.throws(() => dogeToKoinu("184467440737.09551616"));
 });
 
 test("drc20 amounts stay exact", () => {
@@ -52,6 +54,24 @@ test("drc20 amounts stay exact", () => {
   for (const bad of [" 0.5", "0.5 ", "0.5\n", "1.", ".5", "+1", "1e2", "1,2", "", 0.5]) {
     assert.throws(() => drc20Units(bad, 1));
   }
+  // At most uint64 max whole tokens, same as ds-rules; zero is fine (balances can be 0).
+  assert.equal(drc20Units("0"), 0n);
+  assert.equal(drc20Units("18446744073709551615", 0), 18446744073709551615n);
+  assert.equal(drc20Units("18446744073709551615.000", 3), 18446744073709551615000n);
+  assert.throws(() => drc20Units("18446744073709551616", 0));
+  assert.throws(() => drc20Units("18446744073709551615.1", 1));
+});
+
+test("isValidDrc20Amount follows the full ds-rules amount rule", () => {
+  assert.equal(isValidDrc20Amount("1000"), true);
+  assert.equal(isValidDrc20Amount("0.5", 1), true);
+  assert.equal(isValidDrc20Amount("007"), true);
+  assert.equal(isValidDrc20Amount("18446744073709551615"), true);
+  for (const bad of ["0", "0.000", "18446744073709551616", "18446744073709551615.1", "1.", " 1", "-1", "1e2", "", 1]) {
+    assert.equal(isValidDrc20Amount(bad), false, String(bad));
+  }
+  assert.equal(isValidDrc20Amount("0.55", 1), false);
+  assert.equal(isValidDrc20Amount("1", 19), false);
 });
 
 test("paths are encoded ($ in tickers)", async () => {

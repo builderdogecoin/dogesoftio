@@ -18,7 +18,8 @@
 //! ```
 //!
 //! DOGE amounts are koinu (`u64`, 1 DOGE = 100,000,000 koinu). DRC-20 amounts are exact decimal
-//! strings; [`drc20_units`] turns one into an exact integer.
+//! strings; [`drc20_units`] turns one into an exact integer, and [`is_valid_drc20_amount`] checks a mint
+//! or transfer amount against the ds-rules amount rule.
 //!
 //! Outside callers are rate limited. On HTTP 429 the client waits (honouring `Retry-After`)
 //! and tries again, up to [`Client::max_retries`] times. Partners get a key ([`Client::with_api_key`]):
@@ -284,9 +285,9 @@ pub fn koinu_to_doge(koinu: u64) -> String {
     format!("{}.{:08}", koinu / KOINU_PER_DOGE, koinu % KOINU_PER_DOGE)
 }
 
-/// Read an amount the same way ds-rules does: ASCII digits, optional one dot with digits on both
-/// sides, no whitespace, plus, exponent or comma, and no more fraction digits than `decimals`.
-/// Invalid input is rejected, not coerced.
+/// Read an amount with the same format rules as ds-rules: ASCII digits, optional one dot with digits
+/// on both sides, no whitespace, plus, exponent or comma, and no more fraction digits than `decimals`.
+/// Invalid input is rejected, not coerced. Zero is accepted (balances can be 0).
 fn units_from_amount(amount: &str, decimals: u32) -> Option<u128> {
     let (i, f) = match amount.split_once('.') {
         Some((i, f)) => (i, f),
@@ -307,6 +308,18 @@ pub fn doge_to_koinu(doge: &str) -> Option<u64> {
 }
 
 /// A DRC-20 decimal string as an exact integer of `10^-decimals` units: `("492.5", 18)` -> `492.5 * 10^18`.
+/// At most uint64 max whole tokens, like ds-rules. Zero is accepted (balances can be 0); check a mint or
+/// transfer amount with [`is_valid_drc20_amount`].
 pub fn drc20_units(amount: &str, decimals: u32) -> Option<u128> {
-    units_from_amount(amount, decimals)
+    let units = units_from_amount(amount, decimals)?;
+    match 10u128.checked_pow(decimals).and_then(|scale| scale.checked_mul(u128::from(u64::MAX))) {
+        Some(max) if units > max => None,
+        _ => Some(units),
+    }
+}
+
+/// The full ds-rules amount rule for a DRC-20 mint or transfer: the format above, at most `decimals`
+/// fraction digits (`decimals` 0 to 18), above zero and at most uint64 max.
+pub fn is_valid_drc20_amount(amount: &str, decimals: u32) -> bool {
+    decimals <= 18 && matches!(drc20_units(amount, decimals), Some(units) if units > 0)
 }

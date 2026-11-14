@@ -27,7 +27,7 @@ const doginal = await ds.inscription("<txid>i0");  // genesis and current locati
 - Typed responses (`src/index.d.ts`) for health, DOGE balance, DRC-20, inscriptions and names
 - Node 18+ and any runtime with `fetch`; ES module; no dependencies
 - Every `*koinu*` field is an exact `bigint`, even above 2^53. Helpers: `dogeFromKoinu`, `dogeToKoinu`
-- DRC-20 amounts stay exact decimal strings; `drc20Units(amount, decimals)` gives an exact `bigint`
+- DRC-20 amounts stay exact decimal strings; `drc20Units(amount, decimals)` gives an exact `bigint`, and `isValidDrc20Amount(amount, decimals)` checks a mint or transfer amount against the ds-rules amount rule
 - Polite automatic backoff on HTTP `429` (honours `Retry-After`, `maxRetries` default 3)
 
 ## Limits and partner keys

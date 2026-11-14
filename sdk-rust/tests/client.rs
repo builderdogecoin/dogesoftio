@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-use dogesoft::{doge_to_koinu, drc20_units, koinu_to_doge, Client, Error};
+use dogesoft::{doge_to_koinu, drc20_units, is_valid_drc20_amount, koinu_to_doge, Client, Error};
 use std::sync::{Arc, Mutex};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::TcpListener;
@@ -109,6 +109,20 @@ fn amounts() {
     for bad in [" 0.5", "0.5 ", "0.5\n", "1.", ".5", "+1", "1e2", "1,2", ""] {
         assert_eq!(drc20_units(bad, 1), None, "{bad}");
     }
+    // At most uint64 max whole tokens, same as ds-rules; zero is fine (balances can be 0).
+    assert_eq!(drc20_units("0", 18), Some(0));
+    assert_eq!(drc20_units("18446744073709551615", 18), Some(u128::from(u64::MAX) * 10u128.pow(18)));
+    assert_eq!(drc20_units("18446744073709551616", 18), None);
+    assert_eq!(drc20_units("18446744073709551615.1", 1), None);
+    assert!(is_valid_drc20_amount("1000", 18));
+    assert!(is_valid_drc20_amount("0.5", 1));
+    assert!(is_valid_drc20_amount("007", 18));
+    assert!(is_valid_drc20_amount("18446744073709551615", 18));
+    for bad in ["0", "0.000", "18446744073709551616", "18446744073709551615.1", "1.", " 1", "-1", "1e2", ""] {
+        assert!(!is_valid_drc20_amount(bad, 18), "{bad}");
+    }
+    assert!(!is_valid_drc20_amount("0.55", 1));
+    assert!(!is_valid_drc20_amount("1", 19));
 }
 
 #[tokio::test]
