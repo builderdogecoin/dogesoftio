@@ -17,7 +17,7 @@ vectors/
   koinu/routing_cases.json            4,000 generated blocks: first-in first-out routing, the reinscription
                                       gate, fee spends to the coinbase, lost koinu, zero-value outputs
   drc20/json_bodies.json              86 DRC-20 bodies: the strict JSON reading, numbers, ticks, duplicates
-  names/claims.json                   4 real first valid .doge claims, plus 16 claim bodies
+  names/claims.json                   4 real first valid .doge claims, plus 20 claim bodies
   schema.json                         the shape of every file above
 ```
 

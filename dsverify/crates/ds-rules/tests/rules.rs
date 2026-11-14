@@ -724,7 +724,7 @@ fn published_vectors_through_the_shared_runner() {
     assert!(vectors::koinu(&d).unwrap() > 10_000);
     assert_eq!(vectors::mainnet_reveals(&d).unwrap().len(), 12);
     let (n, claims) = vectors::names(&d).unwrap();
-    assert_eq!((n, claims.len()), (20, 4));
+    assert_eq!((n, claims.len()), (24, 4));
 }
 
 #[test]

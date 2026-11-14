@@ -177,6 +177,38 @@
    "expect": {
     "name": null
    }
+  },
+  {
+   "id": "name-body-json-dogemap-ending-is-a-name",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a22726567222c226e616d65223a22782e646f67656d6170227d",
+   "expect": {
+    "name": "x.dogemap"
+   }
+  },
+  {
+   "id": "name-body-json-leading-hyphen-is-a-name",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a22726567222c226e616d65223a222d782e646f6765227d",
+   "expect": {
+    "name": "-x.doge"
+   }
+  },
+  {
+   "id": "name-body-json-all-digit-ending-is-a-name",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a22726567222c226e616d65223a22782e313233227d",
+   "expect": {
+    "name": "x.123"
+   }
+  },
+  {
+   "id": "name-body-json-emoji-ending-is-a-name",
+   "rule": "../docs/names.md",
+   "body_hex": "7b2270223a22646e73222c226f70223a22726567222c226e616d65223a22646f67656d61702ef09f9fa7227d",
+   "expect": {
+    "name": "dogemap.🟧"
+   }
   }
  ]
 }

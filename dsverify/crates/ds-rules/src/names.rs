@@ -7,7 +7,10 @@
 //! * plain text that is exactly one name: `label.ending` (label: 1-63 of `a-z 0-9 -`, no hyphen at
 //!   either end; ending: `xd` or its letter forms, or 1-24 of `a-z 0-9 -`, not all digits, no hyphen
 //!   at either end), surrounding whitespace allowed, any letter case; or
-//! * JSON `{"p":"dns","op":"reg","name":"label.ending"}` (`"op":"register"` means the same).
+//! * JSON `{"p":"dns","op":"reg","name":"label.ending"}` (`"op":"register"` means the same). The name is
+//!   only normalized (see `normalize`): the label and ending rules above and the `.dogemap` exclusion
+//!   apply to plain text only, as in the Doge Soft index, so a JSON name such as `✝.doginals`,
+//!   `-x.doge`, `x.123` or `x.dogemap` is read as a name.
 
 use crate::json;
 
