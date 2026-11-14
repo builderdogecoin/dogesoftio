@@ -117,6 +117,8 @@ pub fn apply_block(db: &mut Db, rpc: &Client, cache: &mut ValueCache, h: u64, b:
                     db,
                     &NewInscription { height: h, txidx: k as u32, reveal_txid: &txid, iid: c.iid, inscription_id: &c.inscription_id, landing, body: &c.body },
                 );
+                // A name claim counts wherever its koinu lands, fee included: the inscription exists in
+                // ord-dogecoin either way (docs/names.md). Only DRC-20 drops fee-landed inscriptions.
                 if let Some(n) = reg_claim(&c.body) {
                     db.name_claim(&n.name, c.iid, &c.inscription_id, h, k as u32)?;
                 }

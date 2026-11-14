@@ -4,9 +4,11 @@ A name like `soft.doge` is a text inscription on Dogecoin. Whoever holds the ins
 
 ## The rules
 
-- Names are `p:dns` inscriptions held in your own wallet.
-- **First valid claim wins**, ordered by block height, then position in the block. Later claims are ignored.
+- Names are `p:dns` inscriptions held in your own wallet. A claim is plain text (`soft.doge`) or JSON (`{"p":"dns","op":"reg","name":"soft.doge"}`).
+- **First valid claim wins**, ordered by block height, then position in the block. Later claims are ignored, even from the same wallet.
 - Ownership follows the inscription. Send the inscription, send the name.
+- A claim whose inscription is spent as a fee when it is created still counts, as in ord-dogecoin. The name then has no holder and cannot be claimed again.
+- The Doge Soft registrar label needs the registrar fee paid in the claim's commit transaction. The label is not ownership.
 - Holders are re-checked against the unspent coin set before any sale or record update.
 - Doge Soft never holds names, keys or coins for you.
 
