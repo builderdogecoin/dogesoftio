@@ -12,7 +12,10 @@
 //! * A koinu past the last output is spent as a fee. It joins the coinbase at offset
 //!   `reward_before_tx + input-space offset`, where `reward_before_tx` is the block subsidy plus the
 //!   fees of every earlier non-coinbase transaction in the block. If the coinbase outputs do not reach
-//!   that offset, the inscription is lost.
+//!   that offset, the inscription is lost. This follows ord-dogecoin, the reference Doginals indexer
+//!   (`offset: self.reward + flotsam.offset`), on purpose: upstream ord (Bitcoin) later subtracts the
+//!   spending transaction's output total (ordinals/ord#1971), and following it would move or un-lose
+//!   fee-spent inscriptions that Doginals indexes already place.
 //! * The gate: a reveal may create an inscription only if the first koinu of its inputs is not already
 //!   inscribed (reinscription creates nothing).
 
@@ -173,6 +176,7 @@ impl BlockRouter {
     pub fn after_tx(&mut self, tx_index: usize, placed: &[Placed], fee: u64) -> Result<(), SatError> {
         for p in placed {
             if let Dest::Fee { .. } = p.dest {
+                // ord-dogecoin: reward + input-space offset, not minus the output total (module docs)
                 let coff = self.reward.checked_add(p.src_off).ok_or(SatError::Overflow)?;
                 self.flotsam.push(Flotsam { iid: p.iid, foff: p.src_off, tx_index, coff });
             }

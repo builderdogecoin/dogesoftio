@@ -283,6 +283,7 @@ pub fn plan_block(txs: &[RawTx], pre: &Prefetch, next_iid: u64) -> Result<BlockP
             }
             for p in &placed {
                 if matches!(p.dest, Dest::Fee { .. }) {
+                    // ord-dogecoin: reward + input-space offset, not minus the output total (see koinu.rs)
                     let coff = reward.checked_add(p.src_off).ok_or(k::SatError::Overflow)?;
                     flotsam.push(k::Flotsam { iid: p.iid, foff: p.src_off, tx_index: ti, coff });
                 }

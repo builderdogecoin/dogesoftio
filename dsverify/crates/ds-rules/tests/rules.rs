@@ -172,6 +172,8 @@ fn fifo_and_zero_value_outputs_hold_nothing() {
     );
 }
 
+// ord-dogecoin offset, kept on purpose: reward + input-space offset (S+1000+900), not upstream ord's
+// reward + offset - output total (S+1400). So a coinbase paying S+1500 cannot hold it and it is lost.
 #[test]
 fn fee_spent_goes_to_coinbase_at_reward_plus_offset_or_is_lost() {
     let mut br = BlockRouter::new();
